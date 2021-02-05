@@ -17,117 +17,67 @@ Library requires `@ngrx/store` module.
 
 ## Usage
 
-State (for example `homepage.state.ts`):
+Import QueryModule in your app.module.ts: 
 ```ts
-import { queryReducer } from '@ngsm/query';
-import { HomepageApiResponseDto } from 'your-api-dto.interfaces.ts';
+import { QueryModule } from '@ngsm/query';
 
-export interface HomepageQueryState {
-  getHomepageApiQuery?: Query<HomepageApiResponseDto>;
-}
-
-export const HOMEPAGE_QUERY_KEY = 'homepageQuery';
-
-export interface HomepagePartialState {
-  readonly [HOMEPAGE_QUERY_KEY]: HomepageQueryState;
-  // Your feature states, for example:
-  // readonly [HOMEPAGE_FEATURE_KEY]: HomepageState;
-}
-```
-
-Reducer (for example `homepage.reducer.ts`):
-```ts
-import { Action } from '@ngrx/store';
-import { HomepageQueryState } from './homepage.state';
-
-...
-
-export function homepageQueryReducer(state: HomepageQueryState | undefined, action: Action) {
-  return queryReducer(state, action);
-}
-```
-
-Selectors (for example `homepage.selectors.ts`):
-```ts
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-
-export const homepageQueryState = createFeatureSelector<HomepagePartialState, HomepageQueryState>(HOMEPAGE_QUERY_KEY);
-
-export const getHomepageApiQuery = createSelector(
-  homepageQueryState,
-  (state: HomepageQueryState) => state.getHomepageApiQuery
-);
-```
-
-State module (for example `homepage-state.module.ts`):
-```ts
-import { NgModule } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-
-import { HomapageEffects } from './homepage.effects';
-import { HomapageFacade } from './homepage.facade';
-import { homepageQueryReducer, homepageReducer } from './homepage.reducer';
-import { HOMEPAGE_QUERY_KEY } from './homepage.state';
-
+...,
 @NgModule({
+  ....,
   imports: [
-    StoreModule.forFeature(HOMEPAGE_QUERY_KEY, homepageQueryReducer),
-    EffectsModule.forFeature([HomapageEffects]),
-  ],
-  providers: [HomapageFacade]
-})
-export class HomapageStateModule {}
+    ....,
+    QueryModule
+  ]
+}
 ```
 
-Effects (for example `homepage.effects.ts`):
+
+How to use @Query decorator in your HTTP service:
 ```ts
-  ...
-
-  getHomepageApi$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(HomepageActions.getHomepageApi),
-      mergeMap(() => concat(
-        // run inProgress action
-        of(QueryActions.inProgress({ query: HomepageQuery.getHomepageApiQuery })),
-        this.homepageRepository
-          .getHomepageApi()
-          .pipe(
-            mergeMap((response) => [
-              // run success action
-              QueryActions.success({ query: HomepageQuery.getHomepageApiQuery, response }),
-            ]),
-            catchError(error => [
-              // run failure action
-              QueryActions.failure({ query: HomepageQuery.getHomepageApiQuery, error }),
-            ])
-          )
-      ))
-    )
-  );
-
-  ...
-```
-
-Facade (for example `homepage.facade.ts`):
-```ts
-...
+import { Query } from '@ngsm/query';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
-export class HomepageFacade {
-  getHomepageQuery$ = this.store.pipe(select(HomepageSelectors.getHomepageQuery));
+export class CarRepository {
+  constructor(private http: HttpClient) { }
 
-  loader$ = isQueryInProgress$([
-    this.getHomepageQuery$,
-    // add all feature queries
-    ...,
-  ]);
-
-  constructor(private store: Store<HomepagePartialState>) {}
-
-  dispatch(action: Action) {
-    this.store.dispatch(action);
+  @Query({ name: 'getCars', groups: ['cars'] })
+  getCars(): Observable<object> {
+    return this.http.get<object>('API_URL');
   }
+}
+```
+
+In your component (for example `car.component.ts`):
+```ts
+...
+import { QueryFacade } from '@ngsm/query';
+...
+
+@Component({
+  selector: 'app-cars',
+  templateUrl: './cars.component.html',
+})
+export class CarsComponent implements OnInit, OnDestroy {
+  // Available methods:
+  loader$ = this.queryFacade.isInProgress$('cars');
+  response$ = this.queryFacade.response$<YOUR_TYPE>('getCars');
+  query$ = this.queryFacade.query$<YOUR_TYPE>('getCars');
+  error$ = this.queryFacade.error$('getCars');
+  status$ = this.queryFacade.status$('getCars');
+
+  constructor(
+    private carRepository: CarRepository,
+    private queryFacade: QueryFacade,
+  ) {}
+
+  ngOnInit() {
+    this.carRepository
+      .getCars()
+      .subscribe();
+  }
+
+  ngOnDestroy() { }
 }
 ```
 
