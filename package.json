@@ -1,33 +1,33 @@
 {
   "name": "@ngsm/query",
-  "version": "0.2.1-alpha.0",
+  "version": "0.2.1-alpha.6",
   "private": false,
   "dependencies": {
-    "@angular/common": "^9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/compiler": "^9.1.4",
+    "@angular/common": "^10.0.0",
+    "@angular/core": "^10.0.0",
+    "@angular/compiler": "^10.0.0",
     "@ngrx/store": "9.0.0",
     "rxjs": "~6.5.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.0",
-    "@angular-devkit/build-ng-packagr": "~0.901.0",
-    "@angular/cli": "~9.1.0",
-    "@angular/compiler-cli": "~9.1.0",
-    "@types/jest": "25.1.4",
-    "@nrwl/jest": "9.2.3",
-    "ng-packagr": "^9.0.0",
-    "tsickle": "^0.38.1",
-    "jest": "25.2.4",
-    "jest-preset-angular": "8.1.3"
+    "@angular-devkit/build-angular": "~0.1002.0",
+    "@angular-devkit/build-ng-packagr": "~0.1002.0",
+    "@angular/cli": "~11.2.6",
+    "@angular/compiler-cli": "~11.2.8",
+    "@types/jest": "26.0.22",
+    "@nrwl/jest": "11.6.1",
+    "ng-packagr": "^11.2.4",
+    "tsickle": "^0.39.1",
+    "jest": "26.6.3",
+    "jest-preset-angular": "8.4.0"
   },
   "scripts": {
     "build": "ng build",
     "test": "ng test",
     "bump": "npm --no-git-tag-version version patch",
     "prepublish": "yarn build && cd dist/query",
-    "release": "yarn prepublish && npm publish --access public"
+    "release": "yarn prepublish && cd ../../dist/libs/query && npm publish"
   },
   "keywords": [
     "Angular",

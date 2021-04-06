@@ -1,6 +1,7 @@
 import { QueryResponse, QueryConfig, QueryGroups, Queries } from './query.model';
 import { QueryState } from './store/query.state';
 import { isQueryGroupInProgress } from './query.utils';
+import { HttpResponse } from '@angular/common/http';
 
 export const getInitialQuery = (): QueryResponse<null> => ({
   status: null,
@@ -15,7 +16,7 @@ export const getInitialQuery = (): QueryResponse<null> => ({
 export const getQueriesGroup = (
   queryState: QueryState,
   queryConfig: QueryConfig,
-  query: QueryResponse<any>,
+  query: QueryResponse<HttpResponse<unknown>>,
   groupName: string,
 ): Queries[] => {
   const { groups } = queryState;
@@ -30,7 +31,7 @@ export const getQueriesGroup = (
 export const getQueryGroups = (
   queryState: QueryState,
   queryConfig: QueryConfig,
-  query: QueryResponse<any>
+  query: QueryResponse<HttpResponse<unknown>>
 ): QueryGroups => {
   const { groups: stateGroups } = queryState;
   const { groups } = queryConfig;
@@ -54,7 +55,7 @@ export const getQueryGroups = (
 export const getQueries = (
   queryState: QueryState,
   queryConfig: QueryConfig,
-  query: QueryResponse<any>
+  query: QueryResponse<HttpResponse<unknown>>
 ): Queries => {
   return {
     ...queryState.queries,
@@ -65,7 +66,7 @@ export const getQueries = (
 export const parseQueryState = (
   queryState: QueryState,
   queryConfig: QueryConfig,
-  query: QueryResponse<any>
+  query: QueryResponse<HttpResponse<unknown>>
 ): QueryState => {
   const groups = getQueryGroups(queryState, queryConfig, query);
   const queries = getQueries(queryState, queryConfig, query);

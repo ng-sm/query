@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Action, select, Store } from '@ngrx/store';
 import { QueryState } from './query.state';
@@ -19,13 +19,18 @@ export class QueryFacade {
     return this.store.pipe(select(selector));
   }
 
-  query$<T>(queryName: string): Observable<QueryResponse<T>> {
-    const selector = QuerySelectors.query(queryName);
+  query$<T>(queryName: string): Observable<QueryResponse<HttpResponse<T>>> {
+    const selector = QuerySelectors.query<T>(queryName);
     return this.store.pipe(select(selector));
   }
 
-  response$<T>(queryName: string): Observable<T> {
-    const selector = QuerySelectors.response(queryName);
+  response$<T>(queryName: string): Observable<HttpResponse<T>> {
+    const selector = QuerySelectors.response<T>(queryName);
+    return this.store.pipe(select(selector));
+  }
+
+  body$<T>(queryName: string): Observable<T> {
+    const selector = QuerySelectors.body<T>(queryName);
     return this.store.pipe(select(selector));
   }
 
@@ -39,3 +44,4 @@ export class QueryFacade {
     return this.store.pipe(select(selector));
   }
 }
+

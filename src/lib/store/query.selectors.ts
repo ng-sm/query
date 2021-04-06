@@ -1,26 +1,35 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { QueryResponse } from '../query.model';
 import { QueryState, QUERY_STORE_KEY } from './query.state';
+import { HttpResponse } from '@angular/common/http';
 
 export const queryState = createFeatureSelector<QueryState>(QUERY_STORE_KEY);
 
 export const isInProgress = (groupName: string) => createSelector(
   queryState,
-  (state: QueryState) => state.groups[groupName] ? state.groups[groupName].isInProgress : null,
+  (state: QueryState) => state.groups[groupName]?.isInProgress || null,
 );
 
-const getQuery = (state: QueryState, name: string): QueryResponse<any> => state.queries[name] || null;
+const getQuery = <T>(state: QueryState, name: string): QueryResponse<HttpResponse<T>> => state.queries[name] as QueryResponse<HttpResponse<T>> || null;
 
-export const query = (queryName: string) => createSelector(
+export const query = <T>(queryName: string) => createSelector(
   queryState,
-  (state: QueryState) => getQuery(state, queryName)
+  (state: QueryState) => getQuery<T>(state, queryName)
 );
 
-export const response = (queryName: string) => createSelector(
+export const body = <T>(queryName: string) => createSelector(
   queryState,
   (state: QueryState) => {
-    const query = getQuery(state, queryName);
-    return query ? query.response : null;
+    const query = getQuery<T>(state, queryName);
+    return query?.response?.body || null;
+  }
+);
+
+export const response = <T>(queryName: string) => createSelector(
+  queryState,
+  (state: QueryState) => {
+    const query = getQuery<T>(state, queryName);
+    return query?.response || null;
   }
 );
 
@@ -28,7 +37,7 @@ export const error = (queryName: string) => createSelector(
   queryState,
   (state: QueryState) => {
     const query = getQuery(state, queryName);
-    return query ? query.error : null;
+    return query?.error || null;
   }
 );
 
@@ -36,6 +45,6 @@ export const status = (queryName: string) => createSelector(
   queryState,
   (state: QueryState) => {
     const query = getQuery(state, queryName);
-    return query ? query.status : null;
+    return query?.status || null;
   }
 );

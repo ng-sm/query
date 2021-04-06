@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
-import { QueryReducer } from './store/query.reducer';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { QueryReducer } from './store/query.reducer';
 import { QUERY_STORE_KEY } from './store/query.state';
 import { QueryFacade } from './store/query.facade';
-import { BOOTSTRAP_QUERY_PROVIDER } from './query.decorator';
+import { QueryInterceptor } from './query.interceptor';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import { BOOTSTRAP_QUERY_PROVIDER } from './query.decorator';
   ],
   providers: [
     QueryFacade,
-    BOOTSTRAP_QUERY_PROVIDER
+    { provide: HTTP_INTERCEPTORS, useClass: QueryInterceptor, multi: true },
   ]
 })
 export class QueryModule {}

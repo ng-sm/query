@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
 import { QueryConfig } from '../query.model';
 
@@ -16,7 +16,7 @@ export const inProgress = createAction(
 
 export const success = createAction(
   `${QUERY_KEY} SUCCESS`,
-  props<{ queryConfig: QueryConfig, response?: any }>(),
+  props<{ queryConfig: QueryConfig, response: HttpResponse<unknown> }>(),
 );
 
 export const failure = createAction(

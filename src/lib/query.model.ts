@@ -1,7 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 export interface Queries {
-  [key: string]: QueryResponse<any>;
+  [key: string]: QueryResponse<HttpResponse<unknown>>;
 }
 
 export interface QueryGroup {

@@ -9,6 +9,7 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
+          "preserveSymlinks": true,
           "options": {
             "tsConfig": "./tsconfig.lib.json",
             "project": "./ng-package.json"
