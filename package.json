@@ -1,11 +1,13 @@
 {
-  "name": "@ngsm/http-query",
-  "version": "0.0.1",
+  "name": "@ngsm/query",
+  "version": "0.2.1-alpha.8",
   "peerDependencies": {
     "@angular/common": "^11.2.10",
     "@angular/core": "^11.2.10"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "@ngrx/store": "^11.1.0",
+    "@ngrx/store-devtools": "^11.1.0"
   }
 }
