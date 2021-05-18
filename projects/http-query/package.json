@@ -1,0 +1,12 @@
+{
+  "name": "@ngsm/query",
+  "version": "0.2.1-alpha.9",
+  "peerDependencies": {
+    "@angular/common": "^12.0.0",
+    "@angular/core": "^12.0.0",
+    "@ngrx/store": "^12.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}
