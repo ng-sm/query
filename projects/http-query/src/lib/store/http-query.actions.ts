@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
 import { QueryConfig } from '../http-query.model';
 
-const QUERY_KEY = '[HTTP Query]';
+export const QUERY_KEY = '[HTTP Query]';
 
 export const init = createAction(
   `${QUERY_KEY} INIT`,

@@ -17,8 +17,8 @@ import * as QueryActions from './store/http-query.actions';
 
 @Injectable()
 export class HttpQueryInterceptor implements HttpInterceptor {
-  private readonly queryNameKey = 'queryName';
-  private readonly queryGroupsKey = 'queryGroups';
+  public readonly queryNameKey = 'queryName';
+  public readonly queryGroupsKey = 'queryGroups';
 
   constructor(private queryFacade: HttpQueryFacade) {}
 
