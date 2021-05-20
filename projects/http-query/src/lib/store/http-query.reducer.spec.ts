@@ -1,4 +1,4 @@
-import { httpQueryReducer } from './http-query.reducer';
+import { httpQueryReducer, QueryReducer } from './http-query.reducer';
 import { initialState } from './http-query.state';
 import * as httpQueryActions from './http-query.actions';
 import { initialQuery } from '../http-query.helpers';
@@ -148,4 +148,10 @@ describe('http-query.reducer', () => {
     });
   });
 
+  it('QueryReducer should return HTTP Query reducer with state', () => {
+    const action = { type: 'Unknown' };
+    const state = httpQueryReducer(initialState, action);
+
+    expect(QueryReducer(state, action)).toEqual(initialState);
+  });
 });

@@ -38,6 +38,36 @@ describe('http-query.helpers', () => {
   });
 
   describe('#addQueryToGroups', () => {
+    it('should return group without changes when group in config is missing', () => {
+      // given
+      const queryData: QueryData<null> = {
+        query: initialQuery,
+        config: {
+          name: 'new-query'
+        },
+        state: {
+          queries: { 'existed-query': initialQuery },
+          groups: {
+            'group-name': {
+              isInProgress: false,
+              queryNames: ['existed-query']
+            }
+          }
+        }
+      };
+
+      // when
+      const queryGroups: QueryGroups = addQueryToGroups(queryData);
+
+      // then
+      expect(queryGroups).toEqual({
+        'group-name': {
+          isInProgress: false,
+          queryNames: ['existed-query'],
+        }
+      });
+    });
+
     it('should add query to all groups', () => {
       // given
       const queryData: QueryData<null> = {

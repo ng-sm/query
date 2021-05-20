@@ -60,7 +60,6 @@ export const httpQueryReducer = createReducer(
   })),
 );
 
-// tslint:disable-next-line:typedef
-export function QueryReducer(state: HttpQueryState, action: Action) {
+export function QueryReducer(state: HttpQueryState, action: Action): HttpQueryState {
   return httpQueryReducer(state, action);
 }
